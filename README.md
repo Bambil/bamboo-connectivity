@@ -1,2 +1,6 @@
 # Connectivity
-d2I1820 connectivity module
+## Installation
+```sh
+# Mosca node.js based mqtt broker
+npm install mosca --save --no-optional
+```
