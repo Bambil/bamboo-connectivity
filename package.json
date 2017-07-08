@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/I1820/Connectivity/issues"
   },
-  "homepage": "https://github.com/I1820/Connectivity#readme"
+  "homepage": "https://github.com/I1820/Connectivity#readme",
+  "devDependencies": {
+    "eslint": "^4.1.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
 }
