@@ -8,10 +8,13 @@
  * +===============================================
  */
 const mongoose = require('mongoose')
+const crypto = require('crypto')
 
 const AgentSchema = new mongoose.Schema({
   name: String,
-  tenant: String
+  tenant: String,
+  hash: String,
+  lastSeen: Date
 })
 
 class AgentClass {
@@ -22,6 +25,13 @@ const Agent = mongoose.model('Agent', AgentSchema)
 
 module.exports = {
   createAgent: function (name, tenant) {
-    return new Agent({name, tenant})
+    let hmac = crypto.createHmac('sha256', 'a secret')
+    hmac.update(name)
+    hmac.update(tenant)
+    let hash = hmac.digest('hex')
+    return new Agent({name,
+      tenant,
+      hash,
+      lastSeen: Date.now()})
   }
 }
