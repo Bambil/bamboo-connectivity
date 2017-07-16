@@ -7,13 +7,17 @@
  * | File Name:     index.js
  * +===============================================
  */
+/* Configuration */
+if (!process.env.mongo_url) {
+  process.env.mongo_url = 'localhost'
+}
 
 /* Mongoose initiation */
 const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise
 
-mongoose.connect('mongodb://localhost/I1820', {
+mongoose.connect(`mongodb://${process.env.mongo_url}/I1820`, {
   useMongoClient: true
 }).then(() => {
   console.log('db connection was created')
