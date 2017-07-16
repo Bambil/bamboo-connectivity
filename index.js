@@ -12,6 +12,12 @@ if (!process.env.mongo_url) {
   process.env.mongo_url = 'localhost'
 }
 
+/* winston.js */
+const winston = require('winston')
+
+/* Configure CLI output on the default logger */
+winston.cli()
+
 /* Mongoose initiation */
 const mongoose = require('mongoose')
 
@@ -20,13 +26,10 @@ mongoose.Promise = global.Promise
 mongoose.connect(`mongodb://${process.env.mongo_url}/I1820`, {
   useMongoClient: true
 }).then(() => {
-  console.log('db connection was created')
+  winston.info(' * DB connection was created')
 }).catch((err) => {
-  console.log(`db connection error: ${err}`)
+  winston.error(` * DB connection error: ${err}`)
 })
 
-/* winston.js */
-var winston = require('winston')
-
-/* Configure CLI output on the default logger */
-winston.cli()
+/* Broker */
+require('./src/broker')
