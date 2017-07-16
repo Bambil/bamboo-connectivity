@@ -49,6 +49,9 @@ server.on('clientConnected', function (client) {
 // fired when a message is received
 server.on('published', function (packet, client) {
   if (client) {
+    let result = packet.topic.match(/^I1820\/(\w+)\/agent/i)
+    if (result && result.length === 2) {
+    }
     console.log('Published', packet.topic, client.id)
   }
 })
