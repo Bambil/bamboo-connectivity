@@ -29,9 +29,16 @@ module.exports = {
     hmac.update(name)
     hmac.update(tenant)
     let hash = hmac.digest('hex')
-    return new Agent({name,
+    return Agent.findOneAndUpdate({
+      hash
+    }, {
+      name,
       tenant,
       hash,
-      lastSeen: Date.now()})
+      lastSeen: Date.now()
+    }, {
+      new: true,
+      upsert: true
+    }).exec()
   }
 }
