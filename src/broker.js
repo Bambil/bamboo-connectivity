@@ -13,7 +13,7 @@ const agent = require('./agent')
 
 const pubsubSettings = {
   type: 'mongo',
-  url: 'mongodb://localhost/mqtt',
+  url: `mongodb://${process.env.mongo_url}/mqtt`,
   pubsubCollection: 'ascoltatori',
   mongo: {}
 }
