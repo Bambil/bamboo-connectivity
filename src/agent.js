@@ -25,7 +25,7 @@ const Agent = mongoose.model('Agent', AgentSchema)
 
 module.exports = {
   createAgent: function (name, tenant) {
-    let hmac = crypto.createHmac('sha256', 'a secret')
+    let hmac = crypto.createHmac('sha256', 'kj97')
     hmac.update(name)
     hmac.update(tenant)
     let hash = hmac.digest('hex')
