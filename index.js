@@ -7,9 +7,12 @@
  * | File Name:     index.js
  * +===============================================
  */
+
+/* Mongoose initiation */
 const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise
+
 mongoose.connect('mongodb://localhost/I1820', {
   useMongoClient: true
 }).then(() => {
@@ -17,3 +20,9 @@ mongoose.connect('mongodb://localhost/I1820', {
 }).catch((err) => {
   console.log(`db connection error: ${err}`)
 })
+
+/* winston.js */
+var winston = require('winston')
+
+/* Configure CLI output on the default logger */
+winston.cli()
