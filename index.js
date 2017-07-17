@@ -8,8 +8,8 @@
  * +===============================================
  */
 /* Configuration */
-if (!process.env.mongo_url) {
-  process.env.mongo_url = 'localhost'
+if (!process.env.I1820_MONGO_URL) {
+  process.env.I1820_MONGO_URL = 'localhost'
 }
 
 /* winston.js */
