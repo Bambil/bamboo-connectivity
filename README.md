@@ -8,3 +8,6 @@
 # Mosca node.js based mqtt broker
 npm install mosca --save --no-optional
 ```
+## Docker
+### Configuration
+- `I1820_MONGO_URL`
