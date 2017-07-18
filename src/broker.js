@@ -11,6 +11,7 @@ const mosca = require('mosca')
 const winston = require('winston')
 
 const agent = require('./agent')
+const Message = require('./message')
 
 const pubsubSettings = {
   type: 'mongo',
@@ -63,9 +64,14 @@ server.on('published', function (packet, client) {
       let tenant = result[1]
       let action = result[2]
       if (action === 'ping') {
-        agent.pingAgent(tenant)
+        let m = Message.fromJSON(packet.payload)
+        if (m) {
+          agent.pingAgent(m.name, tenant, m.hash)
+        }
       } else if (action === 'log') {
-        agent.validateAgent(tenant)
+        let m = Message.fromJSON(packet.payload)
+        if (m && agent.validateAgent(m.name, tenant, m.hash)) {
+        }
       }
     }
   }
