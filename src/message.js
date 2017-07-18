@@ -9,6 +9,10 @@
  */
 
 class Message {
+  static get version () {
+    return '2.0'
+  }
+
   construcotr (hash, thingId, name, data) {
     this.hash = hash
     this.thingId = thingId
@@ -18,6 +22,7 @@ class Message {
 
   toJSON () {
     return JSON.stringify({
+      version: this.version,
       hash: this.hash,
       thingId: this.thingId,
       name: this.name,
@@ -27,6 +32,9 @@ class Message {
 
   static fromJSON (payload) {
     let p = JSON.parse(payload)
+    if (p.version !== Message.version) {
+      return null
+    }
     return new Message(p.hash, p.thingId, p.name, p.data)
   }
 }
