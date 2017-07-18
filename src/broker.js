@@ -14,7 +14,7 @@ const agent = require('./agent')
 
 const pubsubSettings = {
   type: 'mongo',
-  url: `mongodb://${process.env.mongo_url}/mqtt`,
+  url: `mongodb://${process.env.I1820_MONGO_URL}/mqtt`,
   pubsubCollection: 'ascoltatori',
   mongo: {}
 }
@@ -51,14 +51,22 @@ server.on('clientConnected', function (client) {
       })
     })
   }
+
+  result = client.id.match()
 })
 
 // fired when a message is received
 server.on('published', function (packet, client) {
   if (client) {
-    let result = packet.topic.match(/^I1820\/(\w+)\/agent/i)
-    if (result && result.length === 2) {
-      console.log(packet)
+    let result = packet.topic.match(/^I1820\/(\w+)\/agent\/(\w+)/i)
+    if (result && result.length === 3) {
+      let tenant = result[1]
+      let action = result[2]
+      if (action === 'ping') {
+        agent.pingAgent(tenant)
+      } else if (action === 'log') {
+        agent.validateAgent(tenant)
+      }
     }
   }
 })
