@@ -40,5 +40,34 @@ module.exports = {
       new: true,
       upsert: true
     }).exec()
+  },
+
+  pingAgent: function (name, tenant, hash) {
+    let hmac = crypto.createHmac('sha256', 'kj97')
+    hmac.update(name)
+    hmac.update(tenant)
+    if (hash === hmac.digest('hex')) {
+      Agent.findOneAndUpdate({
+        hash
+      }, {
+        name,
+        tenant,
+        hash,
+        lastSeen: Date.now()
+      }, {
+        new: true,
+        upsert: true
+      }).exec()
+    }
+  },
+
+  validateAgent: function (name, tenant, hash) {
+    let hmac = crypto.createHmac('sha256', 'kj97')
+    hmac.update(name)
+    hmac.update(tenant)
+    if (hash === hmac.digest('hex')) {
+      return true
+    }
+    return false
   }
 }
