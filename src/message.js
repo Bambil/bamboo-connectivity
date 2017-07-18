@@ -10,12 +10,11 @@
 
 class Message {
   static get version () {
-    return '2.0'
+    return '2.1'
   }
 
   construcotr (hash, thingId, name, data) {
     this.hash = hash
-    this.thingId = thingId
     this.name = name
     this.data = data
   }
@@ -24,7 +23,6 @@ class Message {
     return JSON.stringify({
       version: this.version,
       hash: this.hash,
-      thingId: this.thingId,
       name: this.name,
       data: this.data
     })
@@ -35,7 +33,7 @@ class Message {
     if (p.version !== Message.version) {
       return null
     }
-    return new Message(p.hash, p.thingId, p.name, p.data)
+    return new Message(p.hash, p.name, p.data)
   }
 }
 
