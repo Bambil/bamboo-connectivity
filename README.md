@@ -11,6 +11,7 @@ npm install mosca --save --no-optional
 ## Docker
 ### Configuration
 
-| Name            | Description           |
-|:---------------:|:--------------------- |
-| I1820_MONGO_URL | MonogDB access url    |
+| Name              | Description           |
+|:-----------------:|:--------------------- |
+| I1820_MONGO_URL   | MonogDB access url    |
+| I1820_BROKER_PORT | Broker listening port |
