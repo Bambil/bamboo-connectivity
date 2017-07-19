@@ -52,7 +52,6 @@ class I1820Broker extends mosca.Server {
           let tenant = result[1]
           let action = result[2]
           if (action === 'ping') {
-            winston.info(packet.payload.toString())
             let m = Message.fromJSON(packet.payload)
             if (m) {
               agent.pingAgent(m.name, tenant, m.hash)
