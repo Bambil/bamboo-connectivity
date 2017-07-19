@@ -9,8 +9,8 @@
  */
 
 class Message {
-  static get version () {
-    return '2.1'
+  static version () {
+    return '2.2'
   }
 
   constructor (hash, thingId, name, data) {
@@ -21,7 +21,7 @@ class Message {
 
   toJSON () {
     return JSON.stringify({
-      version: this.version,
+      version: this.version(),
       hash: this.hash,
       name: this.name,
       data: this.data
@@ -30,7 +30,8 @@ class Message {
 
   static fromJSON (payload) {
     let p = JSON.parse(payload)
-    if (p.version !== Message.version) {
+    console.log(p)
+    if (p.version !== Message.version()) {
       return null
     }
     return new Message(p.hash, p.name, p.data)
