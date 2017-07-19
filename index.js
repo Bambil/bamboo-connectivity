@@ -23,7 +23,7 @@ const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise
 
-mongoose.connect(`mongodb://${process.env.I1820_MONOG_URL}/I1820`, {
+mongoose.connect(`mongodb://${process.env.I1820_MONGO_URL}/I1820`, {
   useMongoClient: true
 }).then(() => {
   winston.info(' * DB connection was created')
