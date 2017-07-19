@@ -13,7 +13,7 @@ class Message {
     return '2.1'
   }
 
-  construcotr (hash, thingId, name, data) {
+  constructor (hash, thingId, name, data) {
     this.hash = hash
     this.name = name
     this.data = data
