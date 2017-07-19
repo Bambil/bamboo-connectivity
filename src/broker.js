@@ -45,10 +45,14 @@ server.on('clientConnected', function (client) {
       })
 
       server.publish({
-        topic: result[0],
+        topic: `I1820/${a.tenant}/agent/${a.name}`,
         payload: a.hash,
         qos: 0,
         retain: false
+      }, (err) => {
+        if (err) {
+          winston.error(err)
+        }
       })
     })
   }
@@ -67,6 +71,7 @@ server.on('published', function (packet, client) {
         let m = Message.fromJSON(packet.payload)
         if (m) {
           agent.pingAgent(m.name, tenant, m.hash)
+          winston.info(` ping from ${m.name} @ ${tenant}`)
         }
       } else if (action === 'log') {
         let m = Message.fromJSON(packet.payload)
