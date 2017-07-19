@@ -21,7 +21,7 @@ class Message {
 
   toJSON () {
     return {
-      version: this.version(),
+      version: Message.version(),
       hash: this.hash,
       name: this.name,
       data: this.data
