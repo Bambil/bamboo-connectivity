@@ -45,6 +45,15 @@ class I1820Broker extends mosca.Server {
       }
     })
 
+    this.on('clientConnected', (client) => {
+      let result = client.id.match(/^I1820\/(\w+)\/(\w+)/i)
+      if (result && result.length === 3) {
+        let component = result[1]
+        let id = result[2]
+        winston.info(` Adding new ${component} with id ${id}`)
+      }
+    })
+
     this.on('published', (packet, client, callback) => {
       if (client) {
         let result = packet.topic.match(/^I1820\/(\w+)\/agent\/(\w+)/i)
