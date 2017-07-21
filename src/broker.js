@@ -92,12 +92,12 @@ class I1820Broker extends mosca.Server {
             let m = Message.fromJSON(packet.payload)
             if (m && agent.validateAgent(m.name, tenant, m.hash)) {
               winston.info(` log from ${m.name} @ ${tenant}`)
-              for (let name in this.channels['I1820/log']) {
+              for (let name in this.manager.channels['I1820/log']) {
                 this.publish({
                   topic: `I1820/log`,
                   payload: {
                     data: m.data,
-                    id: this.channels['I1820/log'][name],
+                    id: this.manager.channels['I1820/log'][name],
                     tenant: tenant,
                     hash: m.hash
                   },
