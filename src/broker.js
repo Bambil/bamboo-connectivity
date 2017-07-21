@@ -12,10 +12,13 @@ const mosca = require('mosca')
 
 const agent = require('./agent')
 const Message = require('./message')
+const I1820Manager = require('./manager')
 
 class I1820Broker extends mosca.Server {
   constructor (options) {
     super(options)
+
+    this.manager = new I1820Manager()
 
     this.on('clientConnected', (client) => {
       let result = client.id.match(/^I1820\/(\w+)\/agent\/(\w+)/i)
@@ -51,6 +54,25 @@ class I1820Broker extends mosca.Server {
         let component = result[1]
         let id = result[2]
         winston.info(` Adding new ${component} with id ${id}`)
+      }
+    })
+
+    this.on('subscribed', (topic, client) => {
+      let result = client.id.match(/^I1820\/(\w+)\/(\w+)/i)
+      if (result && result.length === 3) {
+        let component = result[1]
+        let id = result[2]
+        this.manager.addComponent(component, id, topic)
+        winston.info(` Subscribing on ${topic} from ${component} with id ${id}`)
+      }
+    })
+
+    this.on('clientDisconnected', (client) => {
+      let result = client.id.match(/^I1820\/(\w+)\/(\w+)/i)
+      if (result && result.length === 3) {
+        let component = result[1]
+        let id = result[2]
+        winston.info(` Removing new ${component} with id ${id}`)
       }
     })
 
