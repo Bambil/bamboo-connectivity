@@ -9,6 +9,7 @@
  */
 const winston = require('winston')
 const mosca = require('mosca')
+const Random = require('random-js')
 
 const agent = require('./agent')
 const Message = require('./message')
@@ -82,6 +83,7 @@ class I1820Broker extends mosca.Server {
         if (result && result.length === 3) {
           let tenant = result[1]
           let action = result[2]
+
           if (action === 'ping') {
             let m = Message.fromJSON(packet.payload)
             if (m) {
@@ -93,14 +95,15 @@ class I1820Broker extends mosca.Server {
             if (m && agent.validateAgent(m.name, tenant, m.hash)) {
               winston.info(` log from ${m.name} @ ${tenant}`)
               for (let name in this.manager.channels['I1820/log']) {
+                let selectedId = Random.pick(Random.engines.browserCrypto, Array.from(this.manager.channels['I1820/log'][name]))
                 this.publish({
                   topic: `I1820/log`,
-                  payload: {
+                  payload: JSON.stringify({
                     data: m.data,
-                    id: this.manager.channels['I1820/log'][name],
+                    id: selectedId,
                     tenant: tenant,
                     hash: m.hash
-                  },
+                  }),
                   qos: 0,
                   retain: false
                 })
