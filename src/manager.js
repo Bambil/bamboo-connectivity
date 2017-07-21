@@ -22,7 +22,6 @@ class I1820Manager {
       } else {
         this.channels[channel][name] = new Set([id])
       }
-      console.log(this.channels)
     }
   }
 }
