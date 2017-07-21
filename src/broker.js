@@ -49,7 +49,7 @@ class I1820Broker extends mosca.Server {
     })
 
     this.on('clientConnected', (client) => {
-      let result = client.id.match(/^I1820\/(\w+)\/(\w+)/i)
+      let result = client.id.match(/^I1820\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
         let component = result[1]
         let id = result[2]
@@ -58,7 +58,7 @@ class I1820Broker extends mosca.Server {
     })
 
     this.on('subscribed', (topic, client) => {
-      let result = client.id.match(/^I1820\/(\w+)\/(\w+)/i)
+      let result = client.id.match(/^I1820\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
         let component = result[1]
         let id = result[2]
@@ -68,11 +68,11 @@ class I1820Broker extends mosca.Server {
     })
 
     this.on('clientDisconnected', (client) => {
-      let result = client.id.match(/^I1820\/(\w+)\/(\w+)/i)
+      let result = client.id.match(/^I1820\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
         let component = result[1]
         let id = result[2]
-        winston.info(` Removing new ${component} with id ${id}`)
+        winston.info(` Removing ${component} with id ${id}`)
       }
     })
 
@@ -91,6 +91,20 @@ class I1820Broker extends mosca.Server {
           } else if (action === 'log') {
             let m = Message.fromJSON(packet.payload)
             if (m && agent.validateAgent(m.name, tenant, m.hash)) {
+              winston.info(` log from ${m.name} @ ${tenant}`)
+              for (let name in this.channels['I1820/log']) {
+                this.publish({
+                  topic: `I1820/log`,
+                  payload: {
+                    data: m.data,
+                    id: this.channels['I1820/log'][name],
+                    tenant: tenant,
+                    hash: m.hash
+                  },
+                  qos: 0,
+                  retain: false
+                })
+              }
             }
           }
         }
@@ -103,5 +117,4 @@ class I1820Broker extends mosca.Server {
   }
 }
 
-// fired when a client connects
 module.exports = I1820Broker
