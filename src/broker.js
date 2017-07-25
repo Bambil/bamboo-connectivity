@@ -102,6 +102,7 @@ class I1820Broker extends mosca.Server {
                     data: m.data,
                     id: selectedId,
                     tenant: tenant,
+                    name: m.name,
                     hash: m.hash
                   }),
                   qos: 0,
