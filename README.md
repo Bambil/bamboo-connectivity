@@ -1,4 +1,4 @@
-# Connectivity
+# d2I1820.Connectivity
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](http://standardjs.com)
 
 ## Introduction
