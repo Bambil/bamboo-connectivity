@@ -13,14 +13,15 @@ const Random = require('random-js')
 
 const agent = require('./agent')
 const Message = require('./message')
-const I1820Manager = require('./manager')
+const BambooManager = require('./manager')
 
 class I1820Broker extends mosca.Server {
   constructor (options) {
     super(options)
 
-    this.manager = new I1820Manager()
+    this.manager = new BambooManager()
 
+    // Agent (Gateway)
     this.on('clientConnected', (client) => {
       let result = client.id.match(/^I1820\/(\w+)\/agent\/(\w+)/i)
       if (result && result.length === 3) {
@@ -49,8 +50,9 @@ class I1820Broker extends mosca.Server {
       }
     })
 
+    // Component
     this.on('clientConnected', (client) => {
-      let result = client.id.match(/^I1820\/(\w+)\/component\/(\w+)/i)
+      let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
         let component = result[1]
         let id = result[2]
@@ -59,7 +61,7 @@ class I1820Broker extends mosca.Server {
     })
 
     this.on('subscribed', (topic, client) => {
-      let result = client.id.match(/^I1820\/(\w+)\/component\/(\w+)/i)
+      let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
         let component = result[1]
         let id = result[2]
@@ -69,7 +71,7 @@ class I1820Broker extends mosca.Server {
     })
 
     this.on('clientDisconnected', (client) => {
-      let result = client.id.match(/^I1820\/(\w+)\/component\/(\w+)/i)
+      let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
         let component = result[1]
         let id = result[2]
