@@ -8,12 +8,12 @@
  * +===============================================
  */
 /* Configuration */
-if (!process.env.I1820_MONGO_URL) {
-  process.env.I1820_MONGO_URL = 'localhost'
+if (!process.env.BAMBOO_MONGO_URL) {
+  process.env.BAMBOO_MONGO_URL = 'localhost'
 }
 
-if (!process.env.I1820_BROKER_PORT) {
-  process.env.I1820_BROKER_PORT = 1883
+if (!process.env.BAMBOO_BROKER_PORT) {
+  process.env.BAMBOO_BROKER_PORT = 1883
 }
 
 /* winston.js */
@@ -28,7 +28,7 @@ const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise
 
-mongoose.connect(`mongodb://${process.env.I1820_MONGO_URL}/I1820`, {
+mongoose.connect(`mongodb://${process.env.BAMBOO_MONGO_URL}/bamboo`, {
   useMongoClient: true
 }).then(() => {
   winston.info(' * DB connection was created')
@@ -44,11 +44,11 @@ new I1820Broker(
     port: 1883,
     backend: {
       type: 'mongo',
-      url: `mongodb://${process.env.I1820_MONGO_URL}/mqtt`,
+      url: `mongodb://${process.env.BAMBOO_MONGO_URL}/mqtt`,
       pubsubCollection: 'ascoltatori',
       mongo: {}
     }
   }
 ).on('ready', () => {
-  winston.info(` * MQTT at 0.0.0.0:${process.env.I1820_BROKER_PORT}`)
+  winston.info(` * MQTT at 0.0.0.0:${process.env.BAMBOO_BROKER_PORT}`)
 })
