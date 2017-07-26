@@ -1,9 +1,11 @@
-# d2I1820.Connectivity
+# Bambo Connectivity
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](http://standardjs.com)
 
 ## Introduction
-Docker based Distributed I1820 (d2I1820) is a new version of our platform that targets distributed environments.
-d2I1820 uses microservice architecture and written in Node.js.
+Bambo is IoT platfrom that is come from join of three team:
+1. Nahal Corporation
+2. Bambil Corporation
+3. I1820 Platfrom Developrs
 
 ## Installation
 ```sh
