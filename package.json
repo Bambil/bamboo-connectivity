@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/I1820/Connectivity.git"
+    "url": "git+https://github.com/bambil/bamboo-connectivity.git"
   },
   "author": "Parham Alvani <parham.alvani@gmail.com>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/I1820/Connectivity/issues"
+    "url": "https://github.com/bambil/bamboo-connectivity/issues"
   },
-  "homepage": "https://github.com/I1820/Connectivity#readme",
+  "homepage": "https://github.com/bambil/bamboo-connectivity#readme",
   "devDependencies": {
     "eslint": "^4.1.1",
     "eslint-config-standard": "^10.2.1",
