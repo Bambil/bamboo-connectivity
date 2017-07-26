@@ -1,5 +1,5 @@
 {
-  "name": "@bamboo/connectivity",
+  "name": "@ibamboo/connectivity",
   "version": "1.1.0",
   "description": "Bamboo connectivity module",
   "main": "index.js",
