@@ -9,6 +9,8 @@ d2I1820 uses microservice architecture and written in Node.js.
 ```sh
 # Mosca node.js based mqtt broker
 npm install mosca --save --no-optional
+# MongoDB
+sudo docker run --rm --name mongo -ti -p 27017:27017 mongo
 ```
 ## Docker
 ### Configuration
