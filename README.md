@@ -1,12 +1,14 @@
-# Bambo Connectivity
+# Bamboo Connectivity
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](http://standardjs.com)
 
 ## Introduction
-Bambo is an IoT platfrom that is product of three teams:
+Bamboo is an IoT platfrom that is product of three teams:
 
 * Nahal Corporation
 * Bambil Corporation
 * I1820 Platfrom Developers
+
+## Connectivity
 
 ## Installation
 ```sh
