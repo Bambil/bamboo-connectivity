@@ -8,10 +8,10 @@
  * +===============================================
  */
 
-class I1820Manager {
+class BambooManager {
   constructor () {
     this.channels = {
-      'I1820/log': {}
+      'Bamboo/log': {}
     }
   }
 
@@ -26,4 +26,4 @@ class I1820Manager {
   }
 }
 
-module.exports = I1820Manager
+module.exports = BambooManager
