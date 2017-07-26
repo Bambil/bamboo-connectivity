@@ -5,7 +5,7 @@
 Bambo is IoT platfrom that is come from join of three team:
 * Nahal Corporation
 * Bambil Corporation
-* I1820 Platfrom Developrs
+* I1820 Platfrom Developers
 
 ## Installation
 ```sh
