@@ -1,7 +1,7 @@
 {
-  "name": "@i1820/connectivity",
-  "version": "1.0.0",
-  "description": "d2I1820 connectivity module",
+  "name": "@bamboo/connectivity",
+  "version": "1.1.0",
+  "description": "Bamboo connectivity module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
