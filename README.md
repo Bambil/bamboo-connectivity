@@ -20,7 +20,7 @@ sudo docker run --rm --name mongo -ti -p 27017:27017 mongo
 ## Docker
 ### Configuration
 
-| Name              | Description           |
-|:-----------------:|:--------------------- |
-| I1820_MONGO_URL   | MonogDB access url    |
-| I1820_BROKER_PORT | Broker listening port |
+| Name               | Description           |
+|:------------------:|:--------------------- |
+| BAMBOO_MONGO_URL   | MonogDB access url    |
+| BAMBOO_BROKER_PORT | Broker listening port |
