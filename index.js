@@ -37,9 +37,9 @@ mongoose.connect(`mongodb://${process.env.BAMBOO_MONGO_URL}/bamboo`, {
 })
 
 /* Broker */
-const I1820Broker = require('./src/broker')
+const BambooBroker = require('./src/broker')
 
-new I1820Broker(
+new BambooBroker(
   {
     port: 1883,
     backend: {
