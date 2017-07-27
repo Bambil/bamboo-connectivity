@@ -23,7 +23,7 @@ class I1820Broker extends mosca.Server {
 
     // Agent (Gateway)
     this.on('clientConnected', (client) => {
-      let result = client.id.match(/^I1820\/(\w+)\/agent\/(\w+)/i)
+      let result = client.id.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
       if (result && result.length === 3) {
         let tenant = result[1]
         let name = result[2]
@@ -34,7 +34,7 @@ class I1820Broker extends mosca.Server {
           })
 
           this.publish({
-            topic: `I1820/${a.tenant}/agent/${a.name}`,
+            topic: `Bamboo/${a.tenant}/agent/${a.name}`,
             payload: a.hash,
             qos: 0,
             retain: false
@@ -81,7 +81,7 @@ class I1820Broker extends mosca.Server {
 
     this.on('published', (packet, client, callback) => {
       if (client) {
-        let result = packet.topic.match(/^I1820\/(\w+)\/agent\/(\w+)/i)
+        let result = packet.topic.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
         if (result && result.length === 3) {
           let tenant = result[1]
           let action = result[2]
