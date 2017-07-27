@@ -15,7 +15,7 @@ const agent = require('./agent')
 const Message = require('./message')
 const BambooManager = require('./manager')
 
-class I1820Broker extends mosca.Server {
+class BambooBroker extends mosca.Server {
   constructor (options) {
     super(options)
 
@@ -123,4 +123,4 @@ class I1820Broker extends mosca.Server {
   }
 }
 
-module.exports = I1820Broker
+module.exports = BambooBroker
