@@ -70,6 +70,16 @@ class BambooBroker extends mosca.Server {
       }
     })
 
+    this.on('unsubscribed', (topic, client) => {
+      let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
+      if (result && result.length === 3) {
+        let component = result[1]
+        let id = result[2]
+        this.manager.removeComponent(component, id, topic)
+        winston.info(` UnSubscribing on ${topic} from ${component} with id ${id}`)
+      }
+    })
+
     this.on('clientDisconnected', (client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
