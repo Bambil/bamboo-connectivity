@@ -28,7 +28,7 @@ class BambooManager {
   removeComponent (name, id, channel) {
     if (channel in this.channels) {
       if (name in this.channels[channel]) {
-        this.channels[channel][name].remove(id)
+        this.channels[channel][name].delete(id)
       }
     }
   }
