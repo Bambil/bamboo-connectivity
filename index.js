@@ -38,26 +38,17 @@ mongoose.connect(`mongodb://${process.env.BAMBOO_MONGO_URL}/bamboo`, {
 
 /* Broker Cluster */
 const BambooBroker = require('./src/broker')
-const cluster = require('cluster')
 
-if (cluster.isMaster) {
-  winston.info(` * MQTT Master is running`)
-
-  for (let i = 0; i < require('os').cpus().length; i++) {
-    cluster.fork()
-  }
-} else {
-  new BambooBroker(
-    {
-      port: 1883,
-      backend: {
-        type: 'mongo',
-        url: `mongodb://${process.env.BAMBOO_MONGO_URL}/mqtt`,
-        pubsubCollection: 'ascoltatori',
-        mongo: {}
-      }
+new BambooBroker(
+  {
+    port: 1883,
+    backend: {
+      type: 'mongo',
+      url: `mongodb://${process.env.BAMBOO_MONGO_URL}/mqtt`,
+      pubsubCollection: 'ascoltatori',
+      mongo: {}
     }
-  ).on('ready', () => {
-    winston.info(` * MQTT at 0.0.0.0:${process.env.BAMBOO_BROKER_PORT}`)
-  })
-}
+  }
+).on('ready', () => {
+  winston.info(` * MQTT at 0.0.0.0:${process.env.BAMBOO_BROKER_PORT}`)
+})
