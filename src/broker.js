@@ -89,6 +89,7 @@ class BambooBroker extends mosca.Server {
       }
     })
 
+    // Agent (Gateway) + Component
     this.on('published', (packet, client, callback) => {
       if (client) {
         let result = packet.topic.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
