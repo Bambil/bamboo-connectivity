@@ -25,6 +25,7 @@
     "eslint-plugin-standard": "^3.0.1"
   },
   "dependencies": {
+    "aedes": "^0.29.2",
     "config": "^1.26.1",
     "mongoose": "^4.11.1",
     "random-js": "^1.0.8",
