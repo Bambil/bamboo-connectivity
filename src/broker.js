@@ -8,21 +8,21 @@
  * +===============================================
  */
 const winston = require('winston')
-const mosca = require('mosca')
+const aedes = require('aedes')
 const Random = require('random-js')
 
 const agent = require('./agent')
 const Message = require('./message')
 const BambooManager = require('./manager')
 
-class BambooBroker extends mosca.Server {
+class BambooBroker {
   constructor (options) {
-    super(options)
+    this.broker = aedes()
 
     this.manager = new BambooManager()
 
     // Agent (Gateway)
-    this.on('clientConnected', (client) => {
+    this.broker.on('client', (client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
       if (result && result.length === 3) {
         let tenant = result[1]
@@ -33,7 +33,7 @@ class BambooBroker extends mosca.Server {
             winston.data(l)
           })
 
-          this.publish({
+          client.publish({
             topic: `Bamboo/${a.tenant}/agent/${a.name}`,
             payload: a.hash,
             qos: 0,
@@ -51,7 +51,7 @@ class BambooBroker extends mosca.Server {
     })
 
     // Component
-    this.on('clientConnected', (client) => {
+    this.on('client', (client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
         let component = result[1]
@@ -60,7 +60,7 @@ class BambooBroker extends mosca.Server {
       }
     })
 
-    this.on('subscribed', (topic, client) => {
+    this.on('subscribe', (topic, client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
         let component = result[1]
@@ -70,7 +70,7 @@ class BambooBroker extends mosca.Server {
       }
     })
 
-    this.on('unsubscribed', (topic, client) => {
+    this.on('unsubscribe', (topic, client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
         let component = result[1]
@@ -90,7 +90,8 @@ class BambooBroker extends mosca.Server {
     })
 
     // Agent (Gateway) + Component
-    this.on('published', (packet, client, callback) => {
+    this.on('publish', (packet, client) => {
+      // client will be null if message is published using publish
       if (client) {
         let result = packet.topic.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
         if (result && result.length === 3) {
@@ -127,10 +128,6 @@ class BambooBroker extends mosca.Server {
         }
       }
     })
-  }
-
-  authenticate (client, username, password, callback) {
-    callback(null, true)
   }
 }
 
