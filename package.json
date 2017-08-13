@@ -27,7 +27,6 @@
   "dependencies": {
     "config": "^1.26.1",
     "mongoose": "^4.11.1",
-    "mosca": "^2.5.1",
     "random-js": "^1.0.8",
     "winston": "^2.3.1"
   }
