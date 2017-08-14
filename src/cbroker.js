@@ -3,7 +3,9 @@ const net = require('net')
 const cluster = require('cluster')
 const winston = require('winston')
 const EventEmitter = require('events')
+
 const Agent = require('./agent')
+const BambooComponents = require('./components')
 
 class BambooBrokerWorker {
   run () {
@@ -28,10 +30,31 @@ class BambooBrokerWorker {
       }
     })
 
+    aedes.on('subscribe', (topics, client) => {
+      let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
+      if (result && result.length === 3) {
+        let component = result[1]
+        let id = result[2]
+        this.onComponentSubscription(component, id, topics)
+      }
+    })
+
+    aedes.on('unsubscribe', (topic, client) => {
+      let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
+      if (result && result.length === 3) {
+        let component = result[1]
+        let id = result[2]
+        this.manager.removeComponent(component, id, topic)
+      }
+    })
+
     cluster.on('message', (worker, message, handle) => {
     })
   }
 
+  /**
+   * Creates agent instance and its hash
+  */
   onNewAgent (tenant, name, client) {
     let a = new Agent(tenant, name)
     console.log(`agent ${tenant}/${name} on ${process.pid}`)
@@ -42,6 +65,19 @@ class BambooBrokerWorker {
       qos: 0,
       retain: false
     })
+  }
+
+  onComponentSubscription (component, id, channels) {
+    for (let channel of channels) {
+      channel = channel.topic
+      let msg = {
+        type: 'componentSubscription',
+        component,
+        id,
+        channel
+      }
+      process.send(JSON.stringify(msg))
+    }
   }
 }
 
@@ -54,6 +90,7 @@ class BambooBroker extends EventEmitter {
     super()
     this.port = port
     this.processNumber = processNumber
+    this.components = new BambooComponents()
 
     cluster.setupMaster({
       exec: './src/cbroker'
@@ -80,7 +117,14 @@ class BambooBroker extends EventEmitter {
     })
 
     cluster.on('message', (worker, message, handle) => {
+      message = JSON.parse(message)
+      if (message.type === 'componentSubscription') {
+        this.components.addComponentSubscription(message.component, message.id, message.channel)
+      }
     })
+  }
+
+  onMessage (tenant, name, message) {
   }
 }
 
