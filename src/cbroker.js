@@ -3,6 +3,7 @@ const net = require('net')
 const cluster = require('cluster')
 const winston = require('winston')
 const EventEmitter = require('events')
+const Agent = require('./agent')
 
 class BambooBrokerWorker {
   run () {
@@ -14,7 +15,32 @@ class BambooBrokerWorker {
       console.log(`ping ${client.id} on ${process.pid}`)
     })
 
+    /**
+     * Tests new connected client identification against Bamboo agent identification regex
+     * and if they match, call onNewAgent
+    */
+    aedes.on('client', (client) => {
+      let result = client.id.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
+      if (result && result.length === 3) {
+        let tenant = result[1]
+        let name = result[2]
+        this.onNewAgent(tenant, name, client)
+      }
+    })
+
     cluster.on('message', (worker, message, handle) => {
+    })
+  }
+
+  onNewAgent (tenant, name, client) {
+    let a = new Agent(tenant, name)
+    console.log(`agent ${tenant}/${name} on ${process.pid}`)
+
+    client.publish({
+      topic: `Bamboo/${tenant}/agent/${name}`,
+      payload: a.hash,
+      qos: 0,
+      retain: false
     })
   }
 }
