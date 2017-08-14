@@ -8,6 +8,7 @@
  * +===============================================
  */
 const winston = require('winston')
+const Random = require('random-js')
 
 class BambooComponents {
   constructor () {
@@ -34,6 +35,15 @@ class BambooComponents {
       }
       winston.info(` > component "${id}" of type ${name} doesn't subscribe on ${channel}`)
     }
+  }
+
+  pickComponents (channel) {
+    let selectedIds = []
+    for (let name in this.channels[channel]) {
+      let selectedId = Random.pick(Random.engines.browserCrypto, Array.from(this.channels[channel][name]))
+      selectedIds.push(selectedId)
+    }
+    return selectedIds
   }
 }
 
