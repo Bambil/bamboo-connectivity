@@ -1,4 +1,4 @@
-const aedes = require('aedes')
+const aedes = require('aedes')()
 const net = require('net')
 const cluster = require('cluster')
 const winston = require('winston')
@@ -7,7 +7,13 @@ const EventEmitter = require('events')
 if (cluster.isWorker) {
   const server = net.createServer(aedes.handle)
 
-  server.listen(process.env.port, () => {
+  server.listen(process.env.port)
+
+  aedes.on('ping', (packet, client) => {
+    console.log(`ping ${client.id} on ${process.pid}`)
+  })
+
+  cluster.on('', () => {
   })
 }
 
@@ -39,6 +45,9 @@ class BambooBroker extends EventEmitter {
     cluster.on('listening', (worker, address) => {
       winston.info(` * Worker ${worker.id} on ${address.port}`)
       this.emit('ready')
+    })
+
+    cluster.on('message', (worker, message, handle) => {
     })
   }
 }
