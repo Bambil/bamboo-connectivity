@@ -4,28 +4,30 @@
  * |
  * | Creation Date: 21-07-2017
  * |
- * | File Name:     manager.js
+ * | File Name:     components.js
  * +===============================================
  */
+const winston = require('winston')
 
-class BambooManager {
+class BambooComponents {
   constructor () {
     this.channels = {
       'Bamboo/log': {}
     }
   }
 
-  addComponent (name, id, channel) {
+  addComponentSubscription (name, id, channel) {
     if (channel in this.channels) {
       if (name in this.channels[channel]) {
         this.channels[channel][name].add(id)
       } else {
         this.channels[channel][name] = new Set([id])
       }
+      winston.info(` > component "${id}" of type ${name} is subscribing on ${channel}`)
     }
   }
 
-  removeComponent (name, id, channel) {
+  removeComponentSubscription (name, id, channel) {
     if (channel in this.channels) {
       if (name in this.channels[channel]) {
         this.channels[channel][name].delete(id)
@@ -34,4 +36,4 @@ class BambooManager {
   }
 }
 
-module.exports = BambooManager
+module.exports = BambooComponents
