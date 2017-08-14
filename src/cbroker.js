@@ -4,17 +4,23 @@ const cluster = require('cluster')
 const winston = require('winston')
 const EventEmitter = require('events')
 
+class BambooBrokerWorker {
+  run () {
+    const server = net.createServer(aedes.handle)
+
+    server.listen(process.env.port)
+
+    aedes.on('ping', (packet, client) => {
+      console.log(`ping ${client.id} on ${process.pid}`)
+    })
+
+    cluster.on('message', (worker, message, handle) => {
+    })
+  }
+}
+
 if (cluster.isWorker) {
-  const server = net.createServer(aedes.handle)
-
-  server.listen(process.env.port)
-
-  aedes.on('ping', (packet, client) => {
-    console.log(`ping ${client.id} on ${process.pid}`)
-  })
-
-  cluster.on('', () => {
-  })
+  new BambooBrokerWorker().run()
 }
 
 class BambooBroker extends EventEmitter {
