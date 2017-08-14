@@ -7,61 +7,20 @@
  * | File Name:     agent.js
  * +===============================================
  */
-const mongoose = require('mongoose')
 const crypto = require('crypto')
 
-const AgentSchema = new mongoose.Schema({
-  name: String,
-  tenant: String,
-  hash: String,
-  lastSeen: Date
-})
+class Agent {
+  constructor (tenant, name) {
+    this.tenant = tenant
+    this.name = name
 
-class AgentClass {
-}
-
-AgentSchema.loadClass(AgentClass)
-const Agent = mongoose.model('Agent', AgentSchema)
-
-module.exports = {
-  createAgent: function (name, tenant) {
     let hmac = crypto.createHmac('sha256', 'kj97')
-    hmac.update(name)
-    hmac.update(tenant)
-    let hash = hmac.digest('hex')
-    return Agent.findOneAndUpdate({
-      hash
-    }, {
-      name,
-      tenant,
-      hash,
-      lastSeen: Date.now()
-    }, {
-      new: true,
-      upsert: true
-    }).exec()
-  },
+    hmac.update(this.name)
+    hmac.update(this.tenant)
+    this.hash = hmac.digest('hex')
+  }
 
-  pingAgent: function (name, tenant, hash) {
-    let hmac = crypto.createHmac('sha256', 'kj97')
-    hmac.update(name)
-    hmac.update(tenant)
-    if (hash === hmac.digest('hex')) {
-      Agent.findOneAndUpdate({
-        hash
-      }, {
-        name,
-        tenant,
-        hash,
-        lastSeen: Date.now()
-      }, {
-        new: true,
-        upsert: true
-      }).exec()
-    }
-  },
-
-  validateAgent: function (name, tenant, hash) {
+  static validateAgent (tenant, name, hash) {
     let hmac = crypto.createHmac('sha256', 'kj97')
     hmac.update(name)
     hmac.update(tenant)
@@ -71,3 +30,5 @@ module.exports = {
     return false
   }
 }
+
+module.exports = Agent
