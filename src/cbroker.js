@@ -6,6 +6,7 @@ const EventEmitter = require('events')
 
 const Agent = require('./agent')
 const BambooComponents = require('./components')
+const Message = require('./message')
 
 class BambooBrokerWorker {
   run () {
@@ -20,7 +21,7 @@ class BambooBrokerWorker {
     /**
      * Tests new connected client identification against Bamboo agent identification regex
      * and if they match, call onNewAgent
-    */
+     */
     aedes.on('client', (client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
       if (result && result.length === 3) {
@@ -48,6 +49,18 @@ class BambooBrokerWorker {
       }
     })
 
+    aedes.on('publish', (packet, client) => {
+      if (client) {
+        let result = packet.topic.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
+        if (result && result.length === 3) {
+          let tenant = result[1]
+          let action = result[2]
+          let message = Message.fromJSON(packet.payload)
+          this.onMessage(tenant, action, message)
+        }
+      }
+    })
+
     aedes.on('clientDisconnect', (client) => {
       console.log(client.id)
     })
@@ -58,7 +71,7 @@ class BambooBrokerWorker {
 
   /**
    * Creates agent instance and its hash
-  */
+   */
   onNewAgent (tenant, name, client) {
     let a = new Agent(tenant, name)
     console.log(`agent ${tenant}/${name} on ${process.pid}`)
@@ -92,6 +105,17 @@ class BambooBrokerWorker {
         component,
         id,
         channel
+      }
+      process.send(JSON.stringify(msg))
+    }
+  }
+
+  onMessage (tenant, action, message) {
+    if (action === 'log') {
+      let msg = {
+        type: 'log',
+        tenant,
+        message
       }
       process.send(JSON.stringify(msg))
     }
@@ -139,13 +163,30 @@ class BambooBroker extends EventEmitter {
         this.components.addComponentSubscription(message.component, message.id, message.channel)
       }
       if (message.type === 'componentUnsubscription') {
-        console.log(message)
         this.components.removeComponentSubscription(message.component, message.id, message.channel)
+      }
+      if (message.type === 'log') {
+        this.onLog(message.tenant, message.message)
       }
     })
   }
 
-  onMessage (tenant, name, message) {
+  onLog (tenant, message) {
+    let selectedIds = this.components.pickComponents('Bamboo/log')
+    for (let selectedId of selectedIds) {
+      process.send({
+        topic: `Bamboo/log`,
+        payload: JSON.stringify({
+          data: message.data,
+          id: selectedId,
+          tenant: tenant,
+          name: message.name,
+          hash: message.hash
+        }),
+        qos: 0,
+        retain: false
+      })
+    }
   }
 }
 
