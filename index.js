@@ -37,7 +37,7 @@ const BambooBroker = require('./src/cbroker')
 
 new BambooBroker(
   config.broker.port,
-  2
+  config.broker.processes
 ).on('ready', () => {
   winston.info(` * MQTT at 0.0.0.0:${config.broker.port}`)
 }).run()
