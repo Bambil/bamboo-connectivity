@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "aedes": "^0.29.2",
+    "chalk": "^2.1.0",
     "config": "^1.26.1",
     "random-js": "^1.0.8",
     "vorpal": "^1.12.0",
