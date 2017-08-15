@@ -7,7 +7,6 @@
  * | File Name:     components.js
  * +===============================================
  */
-const winston = require('winston')
 const Random = require('random-js')
 
 class BambooComponents {
@@ -24,7 +23,6 @@ class BambooComponents {
       } else {
         this.channels[channel][name] = new Set([id])
       }
-      winston.info(` > component "${id}" of type ${name} subscribes on ${channel}`)
     }
   }
 
@@ -33,7 +31,6 @@ class BambooComponents {
       if (name in this.channels[channel]) {
         this.channels[channel][name].delete(id)
       }
-      winston.info(` > component "${id}" of type ${name} doesn't subscribe on ${channel}`)
     }
   }
 
