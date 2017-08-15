@@ -17,21 +17,6 @@ const winston = require('winston')
 winston.cli()
 winston.info(' * 18.20 at Sep 07 2016 7:20 IR721')
 
-/* Mongoose initiation */
-/*
-const mongoose = require('mongoose')
-
-mongoose.Promise = global.Promise
-
-mongoose.connect(`mongodb://${config.mongo.url}/bamboo`, {
-  useMongoClient: true
-}).then(() => {
-  winston.info(' * DB connection was created')
-}).catch((err) => {
-  winston.error(` * DB connection error: ${err}`)
-})
-*/
-
 /* Broker Cluster */
 const BambooBroker = require('./src/cbroker')
 
