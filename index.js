@@ -10,19 +10,35 @@
 /* Configuration */
 const config = require('config')
 
-/* winston.js */
-const winston = require('winston')
+/* Command Line Interface */
+const vorpal = require('vorpal')()
+const chalk = require('chalk')
 
-/* Configure CLI output on the default logger */
-winston.cli()
-winston.info(' * 18.20 at Sep 07 2016 7:20 IR721')
+vorpal.find('exit').remove()
+vorpal
+  .command('exit', 'stops borker and connectivity service')
+  .action(function (args, callback) {
+    bambooBroker.stop()
+    process.exit(0)
+  })
+
+vorpal
+  .command('fork', 'fork new broker process')
+  .action(function (args, callback) {
+    bambooBroker.fork()
+    callback()
+  })
+
+vorpal.log(' * 18.20 at Sep 07 2016 7:20 IR721')
+vorpal.delimiter(`${chalk.green('Bamboo')} - ${chalk.rgb(255, 177, 79)('Connectivity')} > `).show()
 
 /* Broker Cluster */
 const BambooBroker = require('./src/cbroker')
 
-new BambooBroker(
+const bambooBroker = new BambooBroker(
   config.broker.port,
   config.broker.processes
-).on('ready', () => {
-  winston.info(` * MQTT at 0.0.0.0:${config.broker.port}`)
+)
+bambooBroker.on('ready', (worker) => {
+  vorpal.log(` * MQTT at 0.0.0.0:${config.broker.port} on ${worker.id}`)
 }).run()
