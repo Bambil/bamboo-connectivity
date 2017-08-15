@@ -3,6 +3,7 @@ module.exports = {
     url: 'localhost:27017'
   },
   broker: {
-    port: 1883
+    port: 1883,
+    processes: 2
   }
 }
