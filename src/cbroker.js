@@ -15,7 +15,6 @@ class BambooBrokerWorker {
     server.listen(process.env.port)
 
     aedes.on('ping', (packet, client) => {
-      console.log(`ping ${client.id} on ${process.pid}`)
     })
 
     /**
@@ -65,7 +64,6 @@ class BambooBrokerWorker {
     })
 
     aedes.on('clientDisconnect', (client) => {
-      console.log(client.id)
     })
 
     cluster.on('message', (worker, message, handle) => {
@@ -140,12 +138,6 @@ class BambooBroker extends EventEmitter {
     cluster.setupMaster({
       exec: './src/cbroker'
     })
-  }
-
-  stop () {
-    for (let worker of this.workers) {
-      worker.kill()
-    }
   }
 
   run () {
