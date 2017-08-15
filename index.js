@@ -14,14 +14,6 @@ const config = require('config')
 const vorpal = require('vorpal')()
 const chalk = require('chalk')
 
-vorpal.find('exit').remove()
-vorpal
-  .command('exit', 'stops borker and connectivity service')
-  .action(function (args, callback) {
-    bambooBroker.stop()
-    process.exit(0)
-  })
-
 vorpal
   .command('fork', 'forks new broker process')
   .action(function (args, callback) {
@@ -30,9 +22,27 @@ vorpal
   })
 
 vorpal
+  .command('workers', 'list running workers')
+  .action(function (args, callback) {
+    this.log(` * Master - ${process.pid}`)
+    for (let worker of bambooBroker.workers) {
+      this.log(` * Worker ${worker.id} - ${worker.process.pid}`)
+    }
+    callback()
+  })
+
+vorpal
   .command('components', 'lists avaiable components')
   .action(function (args, callback) {
-    this.log(bambooBroker.components.channels)
+    for (let channel in bambooBroker.components.channels) {
+      this.log(`${chalk.rgb(255, 255, 186)(channel)}:`)
+      for (let name in bambooBroker.components.channels[channel]) {
+        this.log(`    ${chalk.rgb(186, 225, 255)(name)}:`)
+        for (let id of bambooBroker.components.channels[channel][name]) {
+          this.log(`        * component ${chalk.rgb(186, 255, 201)(id)}`)
+        }
+      }
+    }
     callback()
   })
 
