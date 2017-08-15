@@ -23,9 +23,16 @@ vorpal
   })
 
 vorpal
-  .command('fork', 'fork new broker process')
+  .command('fork', 'forks new broker process')
   .action(function (args, callback) {
     bambooBroker.fork()
+    callback()
+  })
+
+vorpal
+  .command('components', 'lists avaiable components')
+  .action(function (args, callback) {
+    this.log(bambooBroker.components.channels)
     callback()
   })
 
