@@ -49,6 +49,9 @@ class BambooBrokerWorker {
       }
     })
 
+    /**
+     * Recieves messages from agents, parse them and call onMessage
+     */
     aedes.on('publish', (packet, client) => {
       if (client) {
         let result = packet.topic.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
@@ -132,20 +135,25 @@ class BambooBroker extends EventEmitter {
     this.port = port
     this.processNumber = processNumber
     this.components = new BambooComponents()
+    this.workers = []
 
     cluster.setupMaster({
       exec: './src/cbroker'
     })
   }
 
-  run () {
-    winston.info(` * Master ${process.pid} is running`)
+  stop () {
+    for (let worker of this.workers) {
+      worker.kill()
+    }
+  }
 
+  run () {
     // Fork workers.
     for (let i = 0; i < this.processNumber; i++) {
-      cluster.fork({
+      this.workers.push(cluster.fork({
         port: this.port
-      })
+      }))
     }
 
     cluster.on('exit', (worker, code, signal) => {
@@ -153,8 +161,7 @@ class BambooBroker extends EventEmitter {
     })
 
     cluster.on('listening', (worker, address) => {
-      winston.info(` * Worker ${worker.id} on ${address.port}`)
-      this.emit('ready')
+      this.emit('ready', worker)
     })
 
     cluster.on('message', (worker, message, handle) => {
@@ -169,6 +176,12 @@ class BambooBroker extends EventEmitter {
         this.onLog(message.tenant, message.message)
       }
     })
+  }
+
+  fork () {
+    this.workers.push(cluster.fork({
+      port: this.port
+    }))
   }
 
   onLog (tenant, message) {
