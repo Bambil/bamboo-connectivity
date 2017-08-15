@@ -64,6 +64,7 @@ class BambooBrokerWorker {
     })
 
     aedes.on('clientDisconnect', (client) => {
+      // TODO: handle client disconnect
     })
 
     cluster.on('message', (worker, message, handle) => {
