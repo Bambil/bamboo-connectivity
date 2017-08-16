@@ -64,7 +64,12 @@ class BambooBrokerWorker {
     })
 
     aedes.on('clientDisconnect', (client) => {
-      // TODO: handle client disconnect
+      let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
+      if (result && result.length === 3) {
+        let component = result[1]
+        let id = result[2]
+        this.onComponentDisconnection(component, id)
+      }
     })
 
     cluster.on('message', (worker, message, handle) => {
@@ -84,6 +89,15 @@ class BambooBrokerWorker {
       qos: 0,
       retain: false
     })
+  }
+
+  onComponentDisconnection (component, id) {
+    let msg = {
+      type: 'componentDisconnection',
+      component,
+      id
+    }
+    process.send(JSON.stringify(msg))
   }
 
   onComponentSubscription (component, id, channels) {
@@ -164,6 +178,9 @@ class BambooBroker extends EventEmitter {
       }
       if (message.type === 'componentUnsubscription') {
         this.components.removeComponentSubscription(message.component, message.id, message.channel)
+      }
+      if (message.type === 'componentDisconnection') {
+        this.components.removeComponent(message.component, message.id)
       }
       if (message.type === 'log') {
         this.onLog(message.tenant, message.message)
