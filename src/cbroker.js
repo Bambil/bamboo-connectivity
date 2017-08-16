@@ -72,7 +72,9 @@ class BambooBrokerWorker {
       }
     })
 
-    cluster.on('message', (worker, message, handle) => {
+    process.on('message', (message, handle) => {
+      console.log(message)
+      aedes.publish(message)
     })
   }
 
@@ -81,7 +83,6 @@ class BambooBrokerWorker {
    */
   onNewAgent (tenant, name, client) {
     let a = new Agent(tenant, name)
-    console.log(`agent ${tenant}/${name} on ${process.pid}`)
 
     client.publish({
       topic: `Bamboo/${tenant}/agent/${name}`,
@@ -197,17 +198,19 @@ class BambooBroker extends EventEmitter {
   onLog (tenant, message) {
     let selectedIds = this.components.pickComponents('Bamboo/log')
     for (let selectedId of selectedIds) {
-      process.send({
-        topic: `Bamboo/log`,
-        payload: JSON.stringify({
-          data: message.data,
-          id: selectedId,
-          tenant: tenant,
-          name: message.name,
-          hash: message.hash
-        }),
-        qos: 0,
-        retain: false
+      this.workers.forEach((worker) => {
+        worker.send({
+          topic: `Bamboo/log`,
+          payload: JSON.stringify({
+            data: message.data,
+            id: selectedId,
+            tenant: tenant,
+            name: message.name,
+            hash: message.hash
+          }),
+          qos: 0,
+          retain: false
+        })
       })
     }
   }
