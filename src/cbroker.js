@@ -73,7 +73,6 @@ class BambooBrokerWorker {
     })
 
     process.on('message', (message, handle) => {
-      console.log(message)
       aedes.publish(message)
     })
   }
