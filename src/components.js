@@ -12,7 +12,8 @@ const Random = require('random-js')
 class BambooComponents {
   constructor () {
     this.channels = {
-      'Bamboo/log': {}
+      'Bamboo/log': {},
+      'Bamboo/discovery': {}
     }
   }
 
