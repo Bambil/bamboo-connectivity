@@ -14,9 +14,6 @@ class BambooBrokerWorker {
 
     server.listen(process.env.port)
 
-    aedes.on('ping', (packet, client) => {
-    })
-
     /**
      * Tests new connected client identification against Bamboo agent identification regex
      * and if they match, call onNewAgent
@@ -91,6 +88,12 @@ class BambooBrokerWorker {
       payload: a.hash,
       qos: 0,
       retain: false
+    })
+
+    process.send({
+      type: 'agentCreation',
+      tenant,
+      name
     })
   }
 
@@ -180,6 +183,9 @@ class BambooBroker extends EventEmitter {
       if (message.type === 'componentDisconnection') {
         this.components.removeComponent(message.component, message.id)
       }
+      if (message.type === 'agentCreation') {
+        this.onAgentCreation(message.tenant, message.name)
+      }
       if (message.type === 'log') {
         this.onLog(message.tenant, message.message)
       }
@@ -204,6 +210,24 @@ class BambooBroker extends EventEmitter {
             tenant: tenant,
             name: message.name,
             hash: message.hash
+          }),
+          qos: 0,
+          retain: false
+        })
+      })
+    }
+  }
+
+  onAgentCreation (tenant, name) {
+    let selectedIds = this.components.pickComponents('Bamboo/discovery')
+    for (let selectedId of selectedIds) {
+      this.workers.forEach((worker) => {
+        worker.send({
+          topic: `Bamboo/discovery`,
+          payload: JSON.stringify({
+            id: selectedId,
+            tenant: tenant,
+            name: name
           }),
           qos: 0,
           retain: false
