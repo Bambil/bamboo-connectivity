@@ -16,14 +16,14 @@ class BambooBrokerWorker {
 
     /**
      * Tests new connected client identification against Bamboo agent identification regex
-     * and if they match, call onNewAgent
+     * and if they match, call onAgentCreation
      */
     aedes.on('client', (client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
       if (result && result.length === 3) {
         let tenant = result[1]
         let name = result[2]
-        this.onNewAgent(tenant, name, client)
+        this.onAgentCreation(tenant, name, client)
       }
     })
 
@@ -72,6 +72,18 @@ class BambooBrokerWorker {
       }
     })
 
+    /**
+     * Detects agent disconnection
+     */
+    aedes.on('clientDisconnect', (client) => {
+      let result = client.id.match(/^Bamboo\/(\w+)\/agent\/(\w+)/i)
+      if (result && result.length === 3) {
+        let tenant = result[1]
+        let name = result[2]
+        this.onAgentDeletation(tenant, name, client)
+      }
+    })
+
     process.on('message', (message, handle) => {
       aedes.publish(message)
     })
@@ -80,7 +92,7 @@ class BambooBrokerWorker {
   /**
    * Creates agent instance and its hash
    */
-  onNewAgent (tenant, name, client) {
+  onAgentCreation (tenant, name, client) {
     let a = new Agent(tenant, name)
 
     client.publish({
@@ -92,6 +104,17 @@ class BambooBrokerWorker {
 
     process.send({
       type: 'agentCreation',
+      tenant,
+      name
+    })
+  }
+
+  /**
+   * Creates agent instance and its hash
+   */
+  onAgentDeletation (tenant, name, client) {
+    process.send({
+      type: 'agentDeletation',
       tenant,
       name
     })
@@ -186,6 +209,9 @@ class BambooBroker extends EventEmitter {
       if (message.type === 'agentCreation') {
         this.onAgentCreation(message.tenant, message.name)
       }
+      if (message.type === 'agentDeletation') {
+        this.onAgentDeletation(message.tenant, message.name)
+      }
       if (message.type === 'log') {
         this.onLog(message.tenant, message.message)
       }
@@ -227,7 +253,27 @@ class BambooBroker extends EventEmitter {
           payload: JSON.stringify({
             id: selectedId,
             tenant: tenant,
-            name: name
+            name: name,
+            type: 'add'
+          }),
+          qos: 0,
+          retain: false
+        })
+      })
+    }
+  }
+
+  onAgentDeletation (tenant, name) {
+    let selectedIds = this.components.pickComponents('Bamboo/discovery')
+    for (let selectedId of selectedIds) {
+      this.workers.forEach((worker) => {
+        worker.send({
+          topic: `Bamboo/discovery`,
+          payload: JSON.stringify({
+            id: selectedId,
+            tenant: tenant,
+            name: name,
+            type: 'remove'
           }),
           qos: 0,
           retain: false
