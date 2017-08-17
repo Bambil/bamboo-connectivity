@@ -95,48 +95,44 @@ class BambooBrokerWorker {
   }
 
   onComponentDisconnection (component, id) {
-    let msg = {
+    process.send({
       type: 'componentDisconnection',
       component,
       id
-    }
-    process.send(JSON.stringify(msg))
+    })
   }
 
   onComponentSubscription (component, id, channels) {
     for (let channel of channels) {
       channel = channel.topic
-      let msg = {
+      process.send({
         type: 'componentSubscription',
         component,
         id,
         channel
-      }
-      process.send(JSON.stringify(msg))
+      })
     }
   }
 
   onComponentUnsubscription (component, id, channels) {
     for (let channel of channels) {
       channel = channel.topic
-      let msg = {
+      process.send({
         type: 'componentUnsubscription',
         component,
         id,
         channel
-      }
-      process.send(JSON.stringify(msg))
+      })
     }
   }
 
   onMessage (tenant, action, message) {
     if (action === 'log') {
-      let msg = {
+      process.send({
         type: 'log',
         tenant,
         message
-      }
-      process.send(JSON.stringify(msg))
+      })
     }
   }
 }
@@ -175,7 +171,6 @@ class BambooBroker extends EventEmitter {
     })
 
     cluster.on('message', (worker, message, handle) => {
-      message = JSON.parse(message)
       if (message.type === 'componentSubscription') {
         this.components.addComponentSubscription(message.component, message.id, message.channel)
       }
