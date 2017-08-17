@@ -49,7 +49,7 @@ class BambooBrokerWorker {
     })
 
     /**
-     * Recieves messages from agents, parse them and call onMessage
+     * Recieves messages from agents, parses them and call onMessage
      */
     aedes.on('publish', (packet, client) => {
       if (client) {
@@ -63,6 +63,9 @@ class BambooBrokerWorker {
       }
     })
 
+    /**
+     * Detects component disconnection
+     */
     aedes.on('clientDisconnect', (client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
