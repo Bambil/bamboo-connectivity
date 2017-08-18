@@ -49,6 +49,9 @@ class BambooBroker extends EventEmitter {
       if (message.type === 'agentDeletation') {
         this.onAgentDeletation(message.tenant, message.name)
       }
+      if (message.type === 'agentThings') {
+        this.onAgentThings(message.tenant, message.message)
+      }
       if (message.type === 'log') {
         this.onLog(message.tenant, message.message)
       }
@@ -111,6 +114,26 @@ class BambooBroker extends EventEmitter {
             tenant: tenant,
             name: name,
             type: 'remove'
+          }),
+          qos: 0,
+          retain: false
+        })
+      })
+    }
+  }
+
+  onAgentThings (tenant, message) {
+    let selectedIds = this.components.pickComponents('Bamboo/discovery')
+    for (let selectedId of selectedIds) {
+      this.workers.forEach((worker) => {
+        worker.send({
+          topic: `Bamboo/discovery`,
+          payload: JSON.stringify({
+            id: selectedId,
+            tenant: tenant,
+            name: message.name,
+            things: message.data.things,
+            type: 'things'
           }),
           qos: 0,
           retain: false
