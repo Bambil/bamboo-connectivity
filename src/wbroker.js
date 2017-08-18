@@ -166,6 +166,13 @@ class BambooBrokerWorker {
         message
       })
     }
+    if (action === 'discovery') {
+      process.send({
+        type: 'agentThings',
+        tenant,
+        message
+      })
+    }
   }
 }
 
