@@ -25,6 +25,8 @@ vorpal
   .command('workers', 'list running workers')
   .action(function (args, callback) {
     this.log(` * Master - ${process.pid}`)
+    this.log(` # CPU Usage: ${process.cpuUsage().user} millionth of a second`)
+    this.log(` # Memory Usage: ${process.memoryUsage().heapUsed} bytes`)
     for (let worker of bambooBroker.workers) {
       this.log(` * Worker ${worker.id} - ${worker.process.pid}`)
     }
