@@ -2,9 +2,7 @@
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](http://standardjs.com)
 
 ![bamboo](https://img.shields.io/badge/bambil-bamboo-orange.svg?style=flat-square)
-![Docker Automated buil](https://img.shields.io/docker/automated/ibamboo/connectivity.svg?style=flat-square)
-![Docker Build Statu](https://img.shields.io/docker/build/ibamboo/connectivity.svg?style=flat-square)
-![ImageLayers Size](https://img.shields.io/imagelayers/image-size/ibamboo/connectivity/latest.svg?style=flat-square)
+![Docker Automated build](https://img.shields.io/docker/automated/ibamboo/connectivity.svg?style=flat-square)
 
 ## Introduction
 Bamboo is an IoT platfrom that is the product of three teams:
