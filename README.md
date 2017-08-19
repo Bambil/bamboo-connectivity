@@ -15,14 +15,15 @@ Bamboo is an IoT platfrom that is the product of three teams:
 
 ## Connectivity
 
-## Installation
+## Up and Running
+
 ```sh
 # MongoDB
 sudo docker run --rm --name mongo -ti -p 27017:27017 mongo
 ```
 ## Configuration
 
-| Name               | Description           |
-|:------------------:|:--------------------- |
-| BAMBOO_MONGO_URL   | MonogDB access url    |
+| Name                    | Description           |
+|:-----------------------:|:--------------------- |
+| BAMBOO_BROKER_PROCESSES | Broker concurrent processes |
 | BAMBOO_BROKER_PORT | Broker listening port |
