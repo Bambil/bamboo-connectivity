@@ -15,12 +15,6 @@ Bamboo is an IoT platfrom that is the product of three teams:
 
 ## Connectivity
 
-## Up and Running
-
-```sh
-# MongoDB
-sudo docker run --rm --name mongo -ti -p 27017:27017 mongo
-```
 ## Configuration
 
 | Name                    | Description           |
