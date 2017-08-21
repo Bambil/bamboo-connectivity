@@ -12,6 +12,8 @@ Bamboo is an IoT platfrom that is the product of three teams:
 * I1820 Platfrom Developers
 
 ## Connectivity
+[MQTT](http://mqtt.org/) broker based on [aedes](https://github.com/mcollina/aedes)
+which is customized for Bamboo needs.
 
 ## Configuration
 
