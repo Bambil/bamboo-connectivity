@@ -15,6 +15,11 @@ Bamboo is an IoT platfrom that is the product of three teams:
 [MQTT](http://mqtt.org/) broker based on [aedes](https://github.com/mcollina/aedes)
 which is customized for Bamboo needs.
 
+## Up and Running
+```sh
+sudo docker run -p 1883:1883 ibamboo/connectivity
+```
+
 ## Configuration
 
 | Name                    | Description           |
