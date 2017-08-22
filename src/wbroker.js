@@ -116,7 +116,7 @@ class BambooBrokerWorker {
   }
 
   /**
-   * Creates agent instance and its hash
+   * Fires agent deletaion event
    */
   onAgentDeletation (tenant, name, client) {
     process.send({
@@ -126,6 +126,9 @@ class BambooBrokerWorker {
     })
   }
 
+  /**
+   * Fires component disconnection event
+   */
   onComponentDisconnection (component, id) {
     process.send({
       type: 'componentDisconnection',
@@ -134,6 +137,9 @@ class BambooBrokerWorker {
     })
   }
 
+  /**
+   * Fires component subscription event
+   */
   onComponentSubscription (component, id, channels) {
     for (let channel of channels) {
       channel = channel.topic
@@ -146,6 +152,9 @@ class BambooBrokerWorker {
     }
   }
 
+  /**
+   * Fires component unsubscription event
+   */
   onComponentUnsubscription (component, id, channels) {
     for (let channel of channels) {
       channel = channel.topic
@@ -158,6 +167,9 @@ class BambooBrokerWorker {
     }
   }
 
+  /**
+   * Fires `log` and `discovery` messages event
+   */
   onMessage (tenant, action, message) {
     if (action === 'log') {
       process.send({
