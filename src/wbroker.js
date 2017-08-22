@@ -61,7 +61,9 @@ class BambooBrokerWorker {
           let tenant = result[1]
           let action = result[2]
           let message = Message.fromJSON(packet.payload)
-          this.onMessage(tenant, action, message)
+          if (Agent.validateAgent(tenant, message.name, message.hash)) {
+            this.onMessage(tenant, action, message)
+          }
         }
       }
     })
