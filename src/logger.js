@@ -22,18 +22,20 @@ const logger = new winston.Logger({
     return meta
   }],
 
-  transports: [new winston.transports.File({
-    filename: 'bamboo-log.log',
-    colorize: true,
-    timestamp: true,
-    prettyPrint: true,
-    json: false,
-    tailable: true,
-    maxFiles: 1
-  }), new winston.transports.Http({
-    host: config.winstond.host,
-    port: config.winstond.port
-  })]
+  transports: [
+    new winston.transports.File({
+      filename: 'bamboo-log.log',
+      colorize: true,
+      timestamp: true,
+      prettyPrint: true,
+      json: false,
+      tailable: true,
+      maxFiles: 1
+    }), new winston.transports.Http({
+      host: config.winstond.host,
+      port: config.winstond.port
+    })
+  ]
 })
 
 module.exports = logger
