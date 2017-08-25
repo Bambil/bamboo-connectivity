@@ -8,10 +8,10 @@
  * +===============================================
  */
 const cluster = require('cluster')
-const winston = require('winston')
 const EventEmitter = require('events')
 
 const BambooComponents = require('./components')
+const logger = require('./logger')
 
 class BambooBroker extends EventEmitter {
   constructor (port, processNumber) {
@@ -35,7 +35,7 @@ class BambooBroker extends EventEmitter {
     }
 
     cluster.on('exit', (worker, code, signal) => {
-      winston.error(`worker ${worker.process.pid} died`)
+      logger.log('error', `worker ${worker.process.pid} died`)
     })
 
     cluster.on('listening', (worker, address) => {
