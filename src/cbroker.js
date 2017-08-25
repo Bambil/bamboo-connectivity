@@ -1,3 +1,12 @@
+/*
+ * +===============================================
+ * | Author:        Parham Alvani <parham.alvani@gmail.com>
+ * |
+ * | Creation Date: 25-08-2017
+ * |
+ * | File Name:     src/cbroker.js
+ * +===============================================
+ */
 const cluster = require('cluster')
 const winston = require('winston')
 const EventEmitter = require('events')
