@@ -13,10 +13,10 @@ const config = require('config')
 const logger = new winston.Logger({
   rewriters: [function (level, msg, meta) {
     if (meta) {
-      meta.component = 'bamboo-log'
+      meta.component = 'bamboo-connectivity'
     } else {
       meta = {
-        component: 'bamboo-log'
+        component: 'bamboo-connectivity'
       }
     }
     return meta
@@ -24,7 +24,7 @@ const logger = new winston.Logger({
 
   transports: [
     new winston.transports.File({
-      filename: 'bamboo-log.log',
+      filename: 'bamboo-connectivity.log',
       colorize: true,
       timestamp: true,
       prettyPrint: true,
