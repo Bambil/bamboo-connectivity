@@ -1,7 +1,10 @@
 module.exports = {
+  processes: 'BAMBOO_PROCESSES',
   broker: {
-    port: 'BAMBOO_BROKER_PORT',
-    processes: 'BAMBOO_BROKER_PROCESSES'
+    port: 'BAMBOO_BROKER_PORT'
+  },
+  coap: {
+    port: 'BAMBOO_COAP_PORT'
   },
   winstond: {
     host: 'BAMBOO_WINSTOND_HOST',
