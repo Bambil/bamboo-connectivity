@@ -9,7 +9,6 @@
  */
 const aedes = require('aedes')()
 const net = require('net')
-const cluster = require('cluster')
 
 const Agent = require('./agent')
 const Message = require('./message')
@@ -190,6 +189,4 @@ class BambooBrokerWorker {
   }
 }
 
-if (cluster.isWorker) {
-  new BambooBrokerWorker().run()
-}
+module.exports = BambooBrokerWorker
