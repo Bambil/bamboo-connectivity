@@ -11,5 +11,5 @@ const BambooBrokerWorker = require('./broker')
 const cluster = require('cluster')
 
 if (cluster.isWorker) {
-  new BambooBrokerWorker().run()
+  new BambooBrokerWorker(process.env.mqttPort).run()
 }
