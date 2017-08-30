@@ -8,7 +8,6 @@
  * +===============================================
  */
 const coap = require('coap')
-const cluster = require('cluster')
 
 class BambooCoAPWorker {
   run () {
