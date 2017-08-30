@@ -56,8 +56,13 @@ const BambooMaster = require('./src/master')
 
 const bambooMaster = new BambooMaster(
   config.broker.port,
-  config.broker.processes
+  config.coap.port,
+  config.processes
 )
-bambooMaster.on('ready', (worker) => {
-  vorpal.log(` * MQTT at 0.0.0.0:${config.broker.port} on ${worker.id}`)
+bambooMaster.on('ready', (worker, address) => {
+  if (address.port === config.broker.port) {
+    vorpal.log(` * MQTT ${address.address}:${address.port} on ${worker.id}`)
+  } else if (address.port === config.coap.port) {
+    vorpal.log(` * CoAP ${address.address}:${address.port} on ${worker.id}`)
+  }
 }).run()
