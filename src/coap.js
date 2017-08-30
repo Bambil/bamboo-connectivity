@@ -10,9 +10,13 @@
 const coap = require('coap')
 
 class BambooCoAPWorker {
+  constructor (port) {
+    this.port = port
+  }
+
   run () {
     const server = coap.createServer()
-    server.listen(process.env.port)
+    server.listen(this.port)
 
     server.on('request', (req, res) => {
     })
