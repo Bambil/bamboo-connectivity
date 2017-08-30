@@ -21,7 +21,7 @@ class BambooBrokerWorker {
   run () {
     const server = net.createServer(aedes.handle)
 
-    server.listen(this.port)
+    server.listen(this.port, '0.0.0.0')
 
     /**
      * Tests new connected client identification against Bamboo agent identification regex
