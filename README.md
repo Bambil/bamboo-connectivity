@@ -13,7 +13,9 @@ Bamboo is an IoT platfrom that is the product of three teams:
 
 ## Connectivity
 [MQTT](http://mqtt.org/) broker based on [aedes](https://github.com/mcollina/aedes)
-which is customized for Bamboo needs.
+which is customized for Bamboo needs. Bamboo uses this broker for
+communicate with things and components. Bamboo can uses CoAP for
+communicate with things too.
 
 ## Up and Running
 ```sh
