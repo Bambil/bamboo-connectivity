@@ -26,5 +26,6 @@ sudo docker run -p 1883:1883 ibamboo/connectivity
 
 | Name                    | Description           |
 |:-----------------------:|:--------------------- |
-| BAMBOO_BROKER_PROCESSES | Broker concurrent processes |
+| BAMBOO_PROCESSES | Bamboo connectivity concurrent processes |
 | BAMBOO_BROKER_PORT | Broker listening port |
+| BAMBOO_COAP_PORT | CoAP listening port |
