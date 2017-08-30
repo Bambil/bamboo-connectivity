@@ -71,7 +71,8 @@ class BambooMaster extends EventEmitter {
 
   fork () {
     this.workers.push(cluster.fork({
-      port: this.port
+      mqttPort: this.mqttPort,
+      coapPort: this.coapPort
     }))
   }
 
