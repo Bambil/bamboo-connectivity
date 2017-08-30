@@ -14,9 +14,10 @@ const BambooComponents = require('./components')
 const logger = require('./logger')
 
 class BambooMaster extends EventEmitter {
-  constructor (port, processNumber) {
+  constructor (mqttPort, coapPort, processNumber) {
     super()
-    this.port = port
+    this.mqttPort = mqttPort
+    this.coapPort = coapPort
     this.processNumber = processNumber
     this.components = new BambooComponents()
     this.workers = []
@@ -30,7 +31,8 @@ class BambooMaster extends EventEmitter {
     // Fork workers.
     for (let i = 0; i < this.processNumber; i++) {
       this.workers.push(cluster.fork({
-        port: this.port
+        mqttPort: this.mqttPort,
+        coapPort: this.coapPort
       }))
     }
 
@@ -39,7 +41,7 @@ class BambooMaster extends EventEmitter {
     })
 
     cluster.on('listening', (worker, address) => {
-      this.emit('ready', worker)
+      this.emit('ready', worker, address)
     })
 
     cluster.on('message', (worker, message, handle) => {
