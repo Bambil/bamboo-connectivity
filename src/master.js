@@ -4,7 +4,7 @@
  * |
  * | Creation Date: 25-08-2017
  * |
- * | File Name:     src/cbroker.js
+ * | File Name:     src/master.js
  * +===============================================
  */
 const cluster = require('cluster')
@@ -13,7 +13,7 @@ const EventEmitter = require('events')
 const BambooComponents = require('./components')
 const logger = require('./logger')
 
-class BambooBroker extends EventEmitter {
+class BambooMaster extends EventEmitter {
   constructor (port, processNumber) {
     super()
     this.port = port
@@ -22,7 +22,7 @@ class BambooBroker extends EventEmitter {
     this.workers = []
 
     cluster.setupMaster({
-      exec: './src/wbroker'
+      exec: './src/worker'
     })
   }
 
@@ -152,4 +152,4 @@ class BambooBroker extends EventEmitter {
   }
 }
 
-module.exports = BambooBroker
+module.exports = BambooMaster
