@@ -14,10 +14,14 @@ const Agent = require('./agent')
 const Message = require('./message')
 
 class BambooBrokerWorker {
+  constructor (port) {
+    this.port = port
+  }
+
   run () {
     const server = net.createServer(aedes.handle)
 
-    server.listen(process.env.port)
+    server.listen(this.port)
 
     /**
      * Tests new connected client identification against Bamboo agent identification regex
@@ -32,6 +36,9 @@ class BambooBrokerWorker {
       }
     })
 
+    /*
+     * Detects component subscription
+     */
     aedes.on('subscribe', (topics, client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
@@ -41,6 +48,9 @@ class BambooBrokerWorker {
       }
     })
 
+    /*
+     * Detects component unsubscription
+     */
     aedes.on('unsubscribe', (topics, client) => {
       let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
       if (result && result.length === 3) {
@@ -91,6 +101,9 @@ class BambooBrokerWorker {
       }
     })
 
+    /*
+     * Publishes each message comes from the master
+     */
     process.on('message', (message, handle) => {
       aedes.publish(message)
     })
