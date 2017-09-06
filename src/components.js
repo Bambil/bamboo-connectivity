@@ -38,7 +38,7 @@ class BambooComponents {
   pickComponents (channel) {
     let selectedIds = []
     for (let name in this.channels[channel]) {
-      let selectedId = Random.pick(Random.engines.browserCrypto, Array.from(this.channels[channel][name]))
+      let selectedId = Random.pick(Random.engines.nativeMath, Array.from(this.channels[channel][name]))
       selectedIds.push(selectedId)
     }
     return selectedIds
