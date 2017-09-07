@@ -61,7 +61,21 @@ class BambooBrokerWorker {
     })
 
     /**
-     * Recieves messages from agents, parses them and call onMessage
+     * Recieves messages from components, parses them and calls onComponentMessage
+     */
+    aedes.on('publish', (packet, client) => {
+      if (client) {
+        let result = client.id.match(/^Bamboo\/(\w+)\/component\/(\w+)/i)
+        if (result && result.length === 3) {
+          let component = result[1]
+          let id = result[2]
+          this.onComponentMessage(component, id, packet.payload, packet.topic)
+        }
+      }
+    })
+
+    /**
+     * Recieves messages from agents, parses them and calls onMessage
      */
     aedes.on('publish', (packet, client) => {
       if (client) {
@@ -179,6 +193,19 @@ class BambooBrokerWorker {
         channel
       })
     }
+  }
+
+  /**
+   * Fires component message event
+   */
+  onComponentMessage (component, id, message, topic) {
+    process.send({
+      type: 'componentMessage',
+      component,
+      id,
+      message,
+      topic
+    })
   }
 
   /**
