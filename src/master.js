@@ -66,6 +66,9 @@ class BambooMaster extends EventEmitter {
       if (message.type === 'log') {
         this.onLog(message.tenant, message.message)
       }
+      if (message.type === 'conf') {
+        this.onConf(message.component, message.id, message.message)
+      }
     })
   }
 
@@ -94,6 +97,21 @@ class BambooMaster extends EventEmitter {
         })
       })
     }
+  }
+
+  onConf (component, id, message) {
+    this.workers.forEach((worker) => {
+      worker.send({
+        topic: `Bamboo/${message.tenant}/agent/conf`,
+        payload: JSON.stringify({
+          data: message.data,
+          name: message.name,
+          hash: message.hash
+        }),
+        qos: 0,
+        retain: false
+      })
+    })
   }
 
   onAgentCreation (tenant, name) {

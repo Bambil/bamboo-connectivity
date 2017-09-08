@@ -69,7 +69,11 @@ class BambooBrokerWorker {
         if (result && result.length === 3) {
           let component = result[1]
           let id = result[2]
-          this.onComponentMessage(component, id, packet.payload, packet.topic)
+          result = packet.topic.match(/^Bamboo\/(\w+)/i)
+          if (result && result.length === 2) {
+            let action = result[1]
+            this.onComponentMessage(component, id, packet.payload, action)
+          }
         }
       }
     })
@@ -198,14 +202,15 @@ class BambooBrokerWorker {
   /**
    * Fires component message event
    */
-  onComponentMessage (component, id, message, topic) {
-    process.send({
-      type: 'componentMessage',
-      component,
-      id,
-      message,
-      topic
-    })
+  onComponentMessage (component, id, message, action) {
+    if (action === 'conf') {
+      process.send({
+        type: 'conf',
+        component,
+        id,
+        message
+      })
+    }
   }
 
   /**
