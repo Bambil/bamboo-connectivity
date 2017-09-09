@@ -12,6 +12,7 @@ const EventEmitter = require('events')
 
 const BambooComponents = require('./components')
 const logger = require('./logger')
+const Message = require('./message')
 
 class BambooMaster extends EventEmitter {
   constructor (mqttPort, coapPort, processNumber) {
@@ -103,11 +104,11 @@ class BambooMaster extends EventEmitter {
     this.workers.forEach((worker) => {
       worker.send({
         topic: `Bamboo/${message.tenant}/agent/conf`,
-        payload: JSON.stringify({
-          data: message.data,
-          name: message.name,
-          hash: message.hash
-        }),
+        payload: JSON.stringify(new Message(
+          message.hash,
+          message.name,
+          message.data
+        ).toJSON()),
         qos: 0,
         retain: false
       })
