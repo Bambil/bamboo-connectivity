@@ -1,6 +1,6 @@
 {
   "name": "@ibamboo/connectivity",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Bamboo connectivity module",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,6 @@
   "dependencies": {
     "aedes": "^0.29.3",
     "chalk": "^2.1.0",
-    "coap": "^0.21.0",
     "config": "^1.26.2",
     "random-js": "^1.0.8",
     "vorpal": "^1.12.0",

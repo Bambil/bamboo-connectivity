@@ -8,11 +8,9 @@
  * +===============================================
  */
 const BambooBrokerWorker = require('./broker')
-const BambooCoAPWorker = require('./coap')
 
 const cluster = require('cluster')
 
 if (cluster.isWorker) {
   new BambooBrokerWorker(process.env.mqttPort).run()
-  new BambooCoAPWorker(process.env.caopPort).run()
 }
