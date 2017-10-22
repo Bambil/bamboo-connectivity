@@ -4,7 +4,7 @@
   "description": "Bamboo connectivity module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint --color src/*.js index.js"
   },
   "repository": {
     "type": "git",
